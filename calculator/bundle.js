@@ -554,8 +554,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./styles.css", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./styles.css");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./styles.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./styles.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -587,15 +587,15 @@
 		Author Tobias Koppers @sokra
 	*/
 	// css base code, injected by the css-loader
-	module.exports = function () {
+	module.exports = function() {
 		var list = [];
 
 		// return the list of modules as css string
 		list.toString = function toString() {
 			var result = [];
-			for (var i = 0; i < this.length; i++) {
+			for(var i = 0; i < this.length; i++) {
 				var item = this[i];
-				if (item[2]) {
+				if(item[2]) {
 					result.push("@media " + item[2] + "{" + item[1] + "}");
 				} else {
 					result.push(item[1]);
@@ -605,23 +605,25 @@
 		};
 
 		// import a list of modules into the list
-		list.i = function (modules, mediaQuery) {
-			if (typeof modules === "string") modules = [[null, modules, ""]];
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
 			var alreadyImportedModules = {};
-			for (var i = 0; i < this.length; i++) {
+			for(var i = 0; i < this.length; i++) {
 				var id = this[i][0];
-				if (typeof id === "number") alreadyImportedModules[id] = true;
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
 			}
-			for (i = 0; i < modules.length; i++) {
+			for(i = 0; i < modules.length; i++) {
 				var item = modules[i];
 				// skip already imported module
 				// this implementation is not 100% perfect for weird media query combinations
 				//  when a module is imported multiple times with different media queries.
 				//  I hope this will never occur (Hey this way we have smaller bundles)
-				if (typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-					if (mediaQuery && !item[2]) {
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
 						item[2] = mediaQuery;
-					} else if (mediaQuery) {
+					} else if(mediaQuery) {
 						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
 					}
 					list.push(item);
@@ -630,6 +632,7 @@
 		};
 		return list;
 	};
+
 
 /***/ },
 /* 4 */
