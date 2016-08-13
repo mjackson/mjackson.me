@@ -1,4 +1,5 @@
 const path = require('path')
+const autoprefixer = require('autoprefixer')
 
 module.exports = {
   entry: path.resolve(__dirname, 'index.js'),
@@ -11,7 +12,9 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.js$/, loader: 'babel' },
-      { test: /\.css$/, loader: 'style!css' }
+      { test: /\.css$/, loader: 'style!css!postcss' }
     ]
-  }
+  },
+
+  postcss: () => [ autoprefixer ]
 }
