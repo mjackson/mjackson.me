@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+- stable
+before_deploy: npm run build
+deploy:
+  provider: heroku
+  app: mjackson
+  skip_cleanup: true
+  api_key:
+    secure: ugUX5309wLBhQTZAR7YtRb3Hg7O0QJ7V/GptOVuutn0VJb6wIIkAhKgwACkDheNe5JbV4R4+fBKwJUkQnT8Rw2A33mZ8/HyYP3EE0vu0Py9dcPp6WXwhuMXLEcvXNu2e0Ztitq9mjD2k1y6JQ35dMisdzWF7ZR/YZBK9QwvuDa+qyZYqFSIrRTSQdE3j4gOVviztmeafht5pU3yjRhbhXXqFJ01qj+9/3VHTBOQqv6e/q7LPoXq4slpV9K+IuOLzDF3zfb1SxhX8CBNDL3coTE1dxTVZxkh+urxj+6uElERtK43VcYFSDKJh7VhOHs3JyI1agaZYJG/frROpCAaOemDoKS1yrFwCZK+Ii4rxiOfOF9/4CmIwx/i0TrnwkEArQz39oCxOQWIibNqxi7CJEVHE26Tg7/i+xLuH02KbADpPymwQFiUrBf8fgVgczpFOMHPbFZj2PhlVA25NylWvT3wLwgt4WKfUnW7GdiXOVcwCIdU1wPVgPed/fBbtPHyEHnexxey+VTmkR3x5wsTmTLtbfA33CRqr5PgMy/T+VDxU2AkaBO44YAndVPCf8VeJ2Vc0fgFL0t4hogKT5bWzmzLwz6suGHr9nhOudZKUA9+aXqtW7GigSt7PPWgBvON++4doLUGM8R0x/q0cvf5t17sXTlUWlHSOIBB3KT0qDF8=
