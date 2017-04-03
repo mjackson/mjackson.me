@@ -1,5 +1,10 @@
-before_deploy:
-  - yarn run build
+language: node_js
+node_js:
+  - "6"
+script: npm run build
+branches:
+  only:
+  - source
 deploy:
   provider: pages
   skip_cleanup: true
@@ -8,4 +13,4 @@ deploy:
   target_branch: master
   local_dir: build
   on:
-    branch: master
+    branch: source
