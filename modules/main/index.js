@@ -15,7 +15,4 @@ const App = () => (
   </div>
 )
 
-ReactDOM.render(
-  <App/>,
-  document.body
-)
+ReactDOM.render(<App/>, document.body)

@@ -5,8 +5,8 @@ const webpack = require('webpack')
 
 module.exports = {
   entry: {
-    main: path.resolve(__dirname, 'pages/main'),
-    calculator: path.resolve(__dirname, 'pages/calculator')
+    main: path.resolve(__dirname, 'modules/main'),
+    calculator: path.resolve(__dirname, 'modules/calculator')
   },
 
   output: {
@@ -28,15 +28,15 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
     new HTMLWebpackPlugin({
-      title: 'mjackson',
       filename: 'index.html',
+      title: 'mjackson',
       chunks: [ 'main' ],
       inject: true,
       hash: true
     }),
     new HTMLWebpackPlugin({
       filename: 'calculator/index.html',
-      template: 'pages/calculator/index.html',
+      template: 'modules/calculator/index.html',
       chunks: [ 'calculator' ],
       inject: true,
       hash: true

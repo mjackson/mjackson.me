@@ -1,5 +1,5 @@
 html {
-  background: black;
+  background: #333;
 }
 html, body {
   height: 100%;
@@ -9,6 +9,7 @@ body {
   font: 16px Helvetica, sans-serif;
   color: white;
 }
+
 h1 {
   text-align: center;
   width: 100%;
