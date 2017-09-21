@@ -1,12 +1,10 @@
-html {
-  background: #333;
-}
 html, body {
   height: 100%;
 }
 body {
   margin: 0;
   font: 16px Helvetica, sans-serif;
+  background: black;
   color: white;
 }
 
@@ -14,14 +12,4 @@ h1 {
   text-align: center;
   width: 100%;
   font-size: 5em;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-  text-align: center;
-}
-a:link,
-a:visited {
-  color: lightblue;
-  text-decoration: none;
 }

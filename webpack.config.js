@@ -6,7 +6,7 @@ const webpack = require('webpack')
 module.exports = {
   entry: {
     main: path.resolve(__dirname, 'modules/main'),
-    calculator: path.resolve(__dirname, 'modules/calculator')
+    calc: path.resolve(__dirname, 'modules/calc')
   },
 
   output: {
@@ -35,9 +35,9 @@ module.exports = {
       hash: true
     }),
     new HTMLWebpackPlugin({
-      filename: 'calculator/index.html',
-      template: 'modules/calculator/index.html',
-      chunks: [ 'calculator' ],
+      filename: 'calc/index.html',
+      template: 'modules/calc/index.html',
+      chunks: [ 'calc' ],
       inject: true,
       hash: true
     })

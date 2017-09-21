@@ -1,10 +1,11 @@
 language: node_js
 node_js:
-  - "6"
-script: npm run build
+  - node
+cache: yarn
+script: yarn build
 branches:
   only:
-  - source
+    - source
 deploy:
   provider: pages
   skip_cleanup: true
