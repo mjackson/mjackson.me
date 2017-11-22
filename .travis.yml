@@ -10,6 +10,7 @@ deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
+  repo: mjackson/mjackson.github.io
   target_branch: master
   local_dir: build
   on:
