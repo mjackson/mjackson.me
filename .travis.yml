@@ -5,7 +5,7 @@ cache: yarn
 script: yarn build
 branches:
   only:
-    - source
+    - master
 deploy:
   provider: pages
   skip_cleanup: true
@@ -13,4 +13,4 @@ deploy:
   target_branch: gh-pages
   local_dir: build
   on:
-    branch: source
+    branch: master
