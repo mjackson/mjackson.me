@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 
 class AutoScalingText extends React.Component {
   state = {
@@ -15,8 +15,7 @@ class AutoScalingText extends React.Component {
     const actualWidth = node.offsetWidth
     const actualScale = availableWidth / actualWidth
 
-    if (scale === actualScale)
-      return
+    if (scale === actualScale) return
 
     if (actualScale < 1) {
       this.setState({ scale: actualScale })
@@ -30,10 +29,12 @@ class AutoScalingText extends React.Component {
 
     return (
       <div
-        ref={node => this.node = node}
+        ref={node => (this.node = node)}
         className="auto-scaling-text"
         style={{ transform: `scale(${scale},${scale})` }}
-      >{this.props.children}</div>
+      >
+        {this.props.children}
+      </div>
     )
   }
 }
