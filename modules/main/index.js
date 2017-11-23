@@ -39,17 +39,18 @@ class App extends React.Component {
     return (
       <CSSAnimation className="fade-in">
         <Media
-          query={{ minWidth: 400 }}
-          children={matches => (
+          query={{ maxWidth: 400 }}
+          children={small => (
             <div
               style={{
                 width: "100%",
-                maxWidth: 460,
-                paddingLeft: matches ? 100 : 20,
-                paddingRight: matches ? 30 : 20
+                maxWidth: small ? "100%" : 580,
+                paddingTop: small ? 20 : 100,
+                paddingRight: small ? 20 : 30,
+                paddingLeft: small ? 20 : 100,
+                paddingBottom: small ? 20 : 100
               }}
             >
-              <p>&nbsp;</p>
               <p>Hi there.</p>
               <p>
                 My name is Michael Jackson. I'm a software engineer and
@@ -89,8 +90,6 @@ class App extends React.Component {
                 <br />
                 <a href="https://twitter.com/mjackson">@mjackson</a>
               </p>
-              <p>&nbsp;</p>
-              <p>&nbsp;</p>
             </div>
           )}
         />
