@@ -37,10 +37,7 @@ class CSSAnimation extends React.Component {
 class App extends React.Component {
   render() {
     return (
-      <CSSAnimation
-        className="fade-in"
-        style={{ display: "flex", alignItems: "center", height: "100%" }}
-      >
+      <CSSAnimation className="fade-in">
         <Media
           query={{ minWidth: 400 }}
           children={matches => (
@@ -52,6 +49,7 @@ class App extends React.Component {
                 paddingRight: matches ? 30 : 20
               }}
             >
+              <p>&nbsp;</p>
               <p>Hi there.</p>
               <p>
                 My name is Michael Jackson. I'm a software engineer and
@@ -91,6 +89,8 @@ class App extends React.Component {
                 <br />
                 <a href="https://twitter.com/mjackson">@mjackson</a>
               </p>
+              <p>&nbsp;</p>
+              <p>&nbsp;</p>
             </div>
           )}
         />
