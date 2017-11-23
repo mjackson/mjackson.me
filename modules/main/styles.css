@@ -1,15 +1,32 @@
-html, body {
+html,
+body {
   height: 100%;
 }
 body {
   margin: 0;
-  font: 16px Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-size: 22px;
   background: black;
   color: white;
 }
 
-h1 {
-  text-align: center;
-  width: 100%;
-  font-size: 5em;
+a:link {
+  text-decoration: none;
+}
+a:link,
+a:visited {
+  transition: color 0.25s ease-in-out;
+  color: lightblue;
+}
+a:hover {
+  color: orange;
+}
+
+.fade-in {
+  transition: opacity 1s ease-in;
+  opacity: 0.1;
+}
+.fade-in.mounted {
+  opacity: 1;
 }
