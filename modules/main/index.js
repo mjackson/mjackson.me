@@ -1,36 +1,37 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import PropTypes from "prop-types"
-import Media from "react-media"
-import "./styles.css"
+import "./styles.css";
+
+import React from "react";
+import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
+import Media from "react-media";
 
 class CSSAnimation extends React.Component {
   static propTypes = {
     className: PropTypes.string.isRequired,
     mountedClassName: PropTypes.string
-  }
+  };
 
   static defaultProps = {
     mountedClassName: "mounted"
-  }
+  };
 
   state = {
     mounted: false
-  }
+  };
 
   componentDidMount() {
     setTimeout(() => {
-      this.setState({ mounted: true })
-    }, 100)
+      this.setState({ mounted: true });
+    }, 100);
   }
 
   render() {
-    const { className, mountedClassName, ...props } = this.props
+    const { className, mountedClassName, ...props } = this.props;
 
-    let c = className
-    if (this.state.mounted) c += ` ${mountedClassName}`
+    let c = className;
+    if (this.state.mounted) c += ` ${mountedClassName}`;
 
-    return <div {...props} className={c} />
+    return <div {...props} className={c} />;
   }
 }
 
@@ -53,13 +54,15 @@ class App extends React.Component {
             >
               <p>Hi there.</p>
               <p>
-                My name is Michael Jackson. I'm a software engineer and
-                co-founder of{" "}
+                My name is Michael Jackson. I'm an engineer and currently run my
+                own bussiness at{" "}
                 <a href="https://reacttraining.com">React Training</a>.
               </p>
               <p>
                 I write code <a href="https://github.com/mjackson">on GitHub</a>{" "}
-                and occasionally share my thoughts{" "}
+                and share my thoughts weekly on{" "}
+                <a href="http://reactpodcast.com">The React Podcast</a> and
+                occasionally{" "}
                 <a href="https://medium.com/@mjackson">on Medium</a>. I also
                 give{" "}
                 <a href="https://www.youtube.com/playlist?list=PLpMF67G_F_CZWMRVan_F3p6d_Rv5g-Pij">
@@ -94,8 +97,8 @@ class App extends React.Component {
           )}
         />
       </CSSAnimation>
-    )
+    );
   }
 }
 
-ReactDOM.render(<App />, document.body)
+ReactDOM.render(<App />, document.body);
