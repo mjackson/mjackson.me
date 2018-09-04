@@ -55,7 +55,7 @@ class App extends React.Component {
               <p>Hi there.</p>
               <p>
                 My name is Michael Jackson. I'm an engineer and currently run my
-                own bussiness at{" "}
+                own business at{" "}
                 <a href="https://reacttraining.com">React Training</a>.
               </p>
               <p>
