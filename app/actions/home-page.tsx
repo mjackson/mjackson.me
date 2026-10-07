@@ -54,7 +54,6 @@ export function HomePage(handle: Handle<{ posts: Post[] }>) {
               href: item.href,
               title: item.name,
               meta: item.year,
-              metaDetail: item.stat,
               children: item.summary,
             }))}
           />

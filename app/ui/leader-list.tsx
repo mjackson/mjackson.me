@@ -9,8 +9,6 @@ export interface LeaderItem {
   title: string
   /** Right-aligned mono text, e.g. a date or year. */
   meta: string
-  /** Extra mono text before `meta`, hidden on narrow screens. */
-  metaDetail?: string
   /** Optional muted line under the title. */
   children?: RemixNode
 }
@@ -35,7 +33,6 @@ export function LeaderList(handle: Handle<{ items: LeaderItem[]; numbered?: bool
               <span mix={titleStyle}>{item.title}</span>
               <span aria-hidden="true" class="leader" mix={leaderStyle} />
               <span class="meta" mix={metaStyle}>
-                {item.metaDetail ? <span mix={metaDetailStyle}>{item.metaDetail} · </span> : null}
                 {item.meta}
               </span>
             </a>
@@ -98,10 +95,6 @@ const metaStyle = css({
   fontVariantNumeric: 'tabular-nums',
   color: 'var(--fg-muted)',
   transition: 'color 150ms ease',
-})
-
-const metaDetailStyle = css({
-  '@media (max-width: 480px)': { display: 'none' },
 })
 
 const descriptionStyle = css({

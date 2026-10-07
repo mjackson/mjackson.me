@@ -21,11 +21,8 @@ export interface Accomplishment {
   href: string;
   year: string;
   summary: string;
-  /** A short, verifiable stat. Shown in mono on the right. */
-  stat?: string;
 }
 
-// Stats checked October 2026 against the npm downloads API and GitHub.
 export const accomplishments: Accomplishment[] = [
   {
     name: "Remix",
@@ -33,7 +30,6 @@ export const accomplishments: Accomplishment[] = [
     year: "2020",
     summary:
       "Co-founded Remix Software with Ryan Florence. Acquired by Shopify in 2022, and I now lead the project there. Remix 3 shipped in 2026.",
-    stat: "33k stars",
   },
   {
     name: "React Router",
@@ -41,7 +37,6 @@ export const accomplishments: Accomplishment[] = [
     year: "2014",
     summary:
       "Co-created the routing library for React. Over a decade later it is still the backbone for most React apps.",
-    stat: "~70M / week",
   },
   {
     name: "UNPKG",
@@ -55,7 +50,6 @@ export const accomplishments: Accomplishment[] = [
     href: "https://github.com/remix-run/history",
     year: "2015",
     summary: "A small library for managing session history in JavaScript.",
-    stat: "~14M / week",
   },
   {
     name: "expect",
