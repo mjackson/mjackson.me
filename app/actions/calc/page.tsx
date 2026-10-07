@@ -6,6 +6,9 @@ import { profile } from '../../data/profile.ts'
 import { routes } from '../../routes.ts'
 import { Calculator } from './public/calculator.tsx'
 
+const sourceUrl =
+  'https://github.com/mjackson/mjackson.me/blob/main/app/actions/calc/public/calculator.tsx'
+
 // Standalone, like the original: just the calculator on a gray backdrop.
 export function CalcPage() {
   return () => {
@@ -38,8 +41,8 @@ export function CalcPage() {
             <div mix={css({ width: '320px', height: '520px', position: 'relative' })}>
               <Calculator />
             </div>
-            <a href={routes.home.href()} mix={homeLinkStyle}>
-              mjackson.me
+            <a href={sourceUrl} mix={sourceLinkStyle}>
+              view source
             </a>
           </main>
         </body>
@@ -64,7 +67,7 @@ const wrapperStyle = css({
   padding: '20px 0',
 })
 
-const homeLinkStyle = css({
+const sourceLinkStyle = css({
   fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
   fontSize: '12px',
   letterSpacing: '0.08em',
