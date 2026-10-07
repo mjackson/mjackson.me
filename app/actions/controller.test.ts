@@ -51,8 +51,12 @@ describe('site', () => {
     assert.equal(response.status, 200)
     assert.match(html, /<title>Calculator<\/title>/)
 
-    let scripts = html.match(/\/assets\/app\/[^"]+/g) ?? []
-    assert.ok(scripts.length > 0, 'expected the page to load app modules')
+    // What the browser loads: the entry script, module preloads, and the
+    // hydrated component. (Import map keys are stable URLs that aren't served.)
+    let scripts = [...html.matchAll(/(?:src|href|"moduleUrl")[=:]"(\/assets\/[^"]+)"/g)].map(
+      (match) => match[1],
+    )
+    assert.ok(scripts.length > 0, 'expected the page to load browser modules')
     for (let src of new Set(scripts)) {
       let module = await get(src)
       assert.equal(module.status, 200, src)

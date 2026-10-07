@@ -49,47 +49,27 @@ for (let [url, file] of pages) {
 
 // 2. Browser modules
 //
-// Crawl every /assets/ URL the pages reference, then every module those
-// modules import. GitHub Pages serves .ts/.tsx files with non-JavaScript MIME
-// types (e.g. .ts is video/mp2t), which browsers refuse to run as modules, so
-// those are written with an extra .js extension and references are rewritten.
-let assetUrlPattern = /\/assets\/[^"'\s)]+?\.(?:m?js|tsx?|jsx|css)(?=["'\s)])/g
-// Imports between app modules stay relative, e.g. from "./calculator-state.ts".
-let relativeImportPattern = /(\bfrom\s*|\bimport\s*\(?\s*)(["'])(\.{1,2}\/[^"']+)\2/g
+// Production assets are fingerprinted (e.g. calculator.@3TbLtn.tsx), so each
+// deploy gets new URLs and browsers never pair a new page with stale cached
+// modules. The page's import map lists every fingerprinted file, and modules
+// import each other by stable URLs that the import map resolves.
+//
+// GitHub Pages serves .ts/.tsx files with non-JavaScript MIME types (e.g. .ts
+// is video/mp2t), which browsers refuse to run as modules, so those files are
+// written with an extra .js extension and the page's references are rewritten.
+let fingerprintedUrlPattern = /\/assets\/[^"'\s)]+?\.@[\w-]+\.(?:m?js|tsx?|jsx|css)(?=["'\s)])/g
+let assetUrls = new Set([...html.values()].flatMap((text) => text.match(fingerprintedUrlPattern) ?? []))
 let renamed = new Map<string, string>()
-let modules = new Map<string, string>()
-let queue = [...html.values()].flatMap((text) => text.match(assetUrlPattern) ?? [])
 
-while (queue.length > 0) {
-  let url = queue.pop()!
-  if (modules.has(url)) continue
-
-  let text = await fetchText(url, 200)
-  modules.set(url, text)
-  if (/\.(?:tsx?|jsx)$/.test(url)) renamed.set(url, `${url}.js`)
-  queue.push(...(text.match(assetUrlPattern) ?? []))
-  for (let [, , , specifier] of text.matchAll(relativeImportPattern)) {
-    queue.push(new URL(specifier, `http://localhost${url}`).pathname)
-  }
+for (let url of assetUrls) {
+  let file = /\.(?:tsx?|jsx)$/.test(url) ? `${url}.js` : url
+  if (file !== url) renamed.set(url, file)
+  await write(decodeURIComponent(file).slice(1), await fetchText(url, 200))
 }
 
-function rewriteUrls(text: string): string {
+for (let [file, text] of html) {
   for (let [from, to] of renamed) text = text.replaceAll(`${from}"`, `${to}"`)
-  return text
-}
-
-function rewriteModule(text: string): string {
-  // Every .ts/.tsx/.jsx module is renamed by appending .js, so relative
-  // imports of them get the same treatment. (Only in modules: pages may show
-  // code samples with imports like these.)
-  return rewriteUrls(text).replace(relativeImportPattern, (match, prefix, quote, specifier) =>
-    /\.(?:tsx?|jsx)$/.test(specifier) ? `${prefix}${quote}${specifier}.js${quote}` : match,
-  )
-}
-
-for (let [file, text] of html) await write(file, rewriteUrls(text))
-for (let [url, text] of modules) {
-  await write(decodeURIComponent(renamed.get(url) ?? url).slice(1), rewriteModule(text))
+  await write(file, text)
 }
 
 // 3. Redirects for old URLs
@@ -101,7 +81,7 @@ for (let [from, to] of Object.entries(redirects)) {
 for (let [file, to] of redirectFiles) await write(file, redirectPage(to))
 
 console.log(
-  `\nBuilt ${html.size} pages, ${modules.size} browser modules, and ${redirectFiles.size} redirects into dist/`,
+  `\nBuilt ${html.size} pages, ${assetUrls.size} browser modules, and ${redirectFiles.size} redirects into dist/`,
 )
 
 async function fetchText(url: string, expectedStatus: number): Promise<string> {

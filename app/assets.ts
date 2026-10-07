@@ -15,6 +15,7 @@ export const assets = createAssetServer({
   sourceMaps: isDevelopment ? 'external' : undefined,
   minify: !isDevelopment,
   watch: isDevelopment,
+  fingerprint: !isDevelopment,
 })
 
 export const scriptEntryPath = 'app/actions/public/entry.ts'
