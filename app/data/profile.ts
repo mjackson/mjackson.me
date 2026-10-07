@@ -76,6 +76,6 @@ export const accomplishments: Accomplishment[] = [
     href: "https://github.com/mjackson/shadowbox",
     year: "2007",
     summary:
-      "A JavaScript lightbox for photos and video, and one of the go-to scripts for media on the web in the late 2000s.",
+      "A popular JavaScript lightbox for photos and video in the late 2000s.",
   },
 ];
