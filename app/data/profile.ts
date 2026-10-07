@@ -44,7 +44,7 @@ export const accomplishments: Accomplishment[] = [
     stat: "~70M / week",
   },
   {
-    name: "unpkg",
+    name: "UNPKG",
     href: "https://unpkg.com",
     year: "2015",
     summary:
