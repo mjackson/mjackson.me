@@ -6,7 +6,7 @@
     "dev": "NODE_ENV=development node --watch-path=./app --watch-path=./posts --import remix/node-tsx server.ts",
     "start": "NODE_ENV=production node --import remix/node-tsx server.ts",
     "build": "NODE_ENV=production node --import remix/node-tsx scripts/build.ts",
-    "test": "NODE_ENV=test remix test",
+    "test": "NODE_ENV=test POSTS_DIR=test/fixtures/posts remix test",
     "typecheck": "tsc --noEmit"
   },
   "engines": {

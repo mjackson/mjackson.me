@@ -25,19 +25,6 @@ export function HomePage(handle: Handle<{ posts: Post[] }>) {
           </p>
         </section>
 
-        <Section id="work" label="Selected work">
-          <LeaderList
-            items={accomplishments.map((item) => ({
-              key: item.name,
-              href: item.href,
-              title: item.name,
-              meta: item.year,
-              metaDetail: item.stat,
-              children: item.summary,
-            }))}
-          />
-        </Section>
-
         {recentPosts.length > 0 ? (
           <Section
             id="writing"
@@ -59,6 +46,19 @@ export function HomePage(handle: Handle<{ posts: Post[] }>) {
             />
           </Section>
         ) : null}
+
+        <Section id="work" label="Selected work">
+          <LeaderList
+            items={accomplishments.map((item) => ({
+              key: item.name,
+              href: item.href,
+              title: item.name,
+              meta: item.year,
+              metaDetail: item.stat,
+              children: item.summary,
+            }))}
+          />
+        </Section>
       </Document>
     )
   }

@@ -15,7 +15,7 @@ export interface Post {
   readingMinutes: number
 }
 
-const postsDir = path.resolve(import.meta.dirname, '../../posts')
+const defaultPostsDir = path.resolve(import.meta.dirname, '../../posts')
 const isProduction = process.env.NODE_ENV === 'production'
 
 const languages: BundledLanguage[] = [
@@ -68,6 +68,8 @@ export async function getPost(slug: string): Promise<Post | undefined> {
 }
 
 async function loadPosts(): Promise<Post[]> {
+  // Tests point POSTS_DIR at fixtures.
+  let postsDir = process.env.POSTS_DIR ?? defaultPostsDir
   let files = (await fs.readdir(postsDir)).filter((file) => file.endsWith('.md'))
 
   let posts = await Promise.all(
