@@ -1,12 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <style>
-    rect { fill: #09090b; }
-    text { fill: #fafafa; }
-    @media (prefers-color-scheme: dark) {
-      rect { fill: #fafafa; }
-      text { fill: #09090b; }
-    }
-  </style>
-  <rect width="32" height="32" rx="7" />
-  <text x="16" y="21.5" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="15" font-weight="600" letter-spacing="-0.5">mj</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-230 -1254 1814 1814"><style>rect{fill:#000}path{fill:#fff}@media (prefers-color-scheme:dark){rect{fill:#fff}path{fill:#000}}</style><rect x="-230" y="-1254" width="1814" height="1814" rx="326.52"/><path d="M130 0L0 0L0 -710L175 -710L371 -160L567 -710L742 -710L742 0L612 0L612 -490L433 -1L309 -1L130 -490L130 0M1106 16L1106 16Q1029 16 973.5 -17.5Q918 -51 888 -110.5Q858 -170 857 -246L857 -246L988 -253Q989 -175 1020 -136Q1051 -97 1106 -97L1106 -97Q1162 -97 1193 -136.5Q1224 -176 1224 -253L1224 -253L1224 -710L1354 -710L1354 -253Q1354 -171 1323 -110.5Q1292 -50 1236.5 -17Q1181 16 1106 16"/></svg>
