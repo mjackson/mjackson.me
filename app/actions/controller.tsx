@@ -1,14 +1,22 @@
 import { createController } from 'remix/router'
 
+import { assets } from '../assets.ts'
 import { getPosts } from '../data/posts.ts'
 import { profile } from '../data/profile.ts'
 import { routes } from '../routes.ts'
+import { CalcPage } from './calc/page.tsx'
 import { HomePage } from './home-page.tsx'
 
 export default createController(routes, {
   actions: {
     async home(context) {
       return context.render(<HomePage posts={await getPosts()} />)
+    },
+    calc(context) {
+      return context.render(<CalcPage />)
+    },
+    async assets(context) {
+      return (await assets.fetch(context.request)) ?? new Response('Not Found', { status: 404 })
     },
     async feed() {
       let posts = (await getPosts()).filter((post) => !post.draft)

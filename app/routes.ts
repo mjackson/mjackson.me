@@ -7,4 +7,6 @@ export const routes = route({
     show: get('/:slug'),
   }),
   feed: get('/feed.xml'),
+  calc: get('/calc'),
+  assets: get('/assets/*path'),
 })

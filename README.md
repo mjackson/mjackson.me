@@ -33,16 +33,19 @@ The intro and the "Selected work" list come from `app/data/profile.ts`.
 ```
 app/
   routes.ts               every URL on the site
-  router.tsx              middleware + 404
+  router.tsx              middleware, old-URL redirects, 404
+  assets.ts               compiles browser modules (only /calc uses any)
   actions/                controllers and pages, one folder per route map
+  actions/calc/           the calculator, ported from the 2017 site
   data/posts.ts           Markdown loading, frontmatter, highlighting
   data/profile.ts         bio, links, accomplishments
+  data/redirects.ts       old URLs → new URLs
   ui/theme.ts             color tokens, type, and prose styles
   ui/document.tsx         <html> shell, header, footer
   ui/leader-list.tsx      the numbered "name ····· meta" lists
 posts/                    blog posts
 public/                   served as-is
-scripts/build.ts          prerenders the site into dist/
+scripts/build.ts          prerenders pages, browser modules, and redirects into dist/
 ```
 
 ## Deploying

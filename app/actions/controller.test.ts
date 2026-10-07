@@ -2,6 +2,7 @@ import * as assert from 'remix/assert'
 import { describe, it } from 'remix/test'
 
 import { getPosts } from '../data/posts.ts'
+import { redirects } from '../data/redirects.ts'
 import { router } from '../router.tsx'
 import { routes } from '../routes.ts'
 
@@ -41,6 +42,30 @@ describe('site', () => {
   it('returns a 404 page for unknown posts and URLs', async () => {
     assert.equal((await get(routes.blog.show.href({ slug: 'nope' }))).status, 404)
     assert.equal((await get('/does/not/exist')).status, 404)
+  })
+
+  it('GET /calc renders the calculator and its browser modules load', async () => {
+    let response = await get(routes.calc.href())
+    let html = await response.text()
+
+    assert.equal(response.status, 200)
+    assert.match(html, /<title>Calculator<\/title>/)
+
+    let scripts = html.match(/\/assets\/app\/[^"]+/g) ?? []
+    assert.ok(scripts.length > 0, 'expected the page to load app modules')
+    for (let src of new Set(scripts)) {
+      let module = await get(src)
+      assert.equal(module.status, 200, src)
+      assert.match(module.headers.get('Content-Type') ?? '', /javascript/, src)
+    }
+  })
+
+  it('redirects old calculator URLs to /calc', async () => {
+    for (let path of Object.keys(redirects)) {
+      let response = await get(path)
+      assert.equal(response.status, 301, path)
+      assert.equal(new URL(response.headers.get('Location')!).pathname, routes.calc.href(), path)
+    }
   })
 
   it('GET /feed.xml returns RSS', async () => {
