@@ -54,6 +54,8 @@ for (let [url, file] of pages) {
 // types (e.g. .ts is video/mp2t), which browsers refuse to run as modules, so
 // those are written with an extra .js extension and references are rewritten.
 let assetUrlPattern = /\/assets\/[^"'\s)]+?\.(?:m?js|tsx?|jsx|css)(?=["'\s)])/g
+// Imports between app modules stay relative, e.g. from "./calculator-state.ts".
+let relativeImportPattern = /(\bfrom\s*|\bimport\s*\(?\s*)(["'])(\.{1,2}\/[^"']+)\2/g
 let renamed = new Map<string, string>()
 let modules = new Map<string, string>()
 let queue = [...html.values()].flatMap((text) => text.match(assetUrlPattern) ?? [])
@@ -66,16 +68,28 @@ while (queue.length > 0) {
   modules.set(url, text)
   if (/\.(?:tsx?|jsx)$/.test(url)) renamed.set(url, `${url}.js`)
   queue.push(...(text.match(assetUrlPattern) ?? []))
+  for (let [, , , specifier] of text.matchAll(relativeImportPattern)) {
+    queue.push(new URL(specifier, `http://localhost${url}`).pathname)
+  }
 }
 
-function rewrite(text: string): string {
+function rewriteUrls(text: string): string {
   for (let [from, to] of renamed) text = text.replaceAll(`${from}"`, `${to}"`)
   return text
 }
 
-for (let [file, text] of html) await write(file, rewrite(text))
+function rewriteModule(text: string): string {
+  // Every .ts/.tsx/.jsx module is renamed by appending .js, so relative
+  // imports of them get the same treatment. (Only in modules: pages may show
+  // code samples with imports like these.)
+  return rewriteUrls(text).replace(relativeImportPattern, (match, prefix, quote, specifier) =>
+    /\.(?:tsx?|jsx)$/.test(specifier) ? `${prefix}${quote}${specifier}.js${quote}` : match,
+  )
+}
+
+for (let [file, text] of html) await write(file, rewriteUrls(text))
 for (let [url, text] of modules) {
-  await write(decodeURIComponent(renamed.get(url) ?? url).slice(1), rewrite(text))
+  await write(decodeURIComponent(renamed.get(url) ?? url).slice(1), rewriteModule(text))
 }
 
 // 3. Redirects for old URLs

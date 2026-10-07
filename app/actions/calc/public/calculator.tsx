@@ -1,88 +1,29 @@
 // A port of the React calculator that lived at mjackson.me/calculator (2016)
-// and mjackson.me/calc (2017-2018). Same look, same keys, same behavior.
+// and mjackson.me/calc (2017-2018). Same look and keys; the behavior lives in
+// ./calculator-state.ts.
 
 import type { Handle, MixInput, RemixNode } from 'remix/component'
 import { clientEntry, css, on, ref } from 'remix/component'
 
-const operations: Record<string, (prevValue: number, nextValue: number) => number> = {
-  '/': (prevValue, nextValue) => prevValue / nextValue,
-  '*': (prevValue, nextValue) => prevValue * nextValue,
-  '+': (prevValue, nextValue) => prevValue + nextValue,
-  '-': (prevValue, nextValue) => prevValue - nextValue,
-  '=': (_prevValue, nextValue) => nextValue,
-}
+import {
+  clearsDisplayOnly,
+  initialState,
+  keyFromKeyboard,
+  press,
+  type Key as CalculatorKey,
+} from './calculator-state.ts'
 
 export const Calculator = clientEntry(import.meta.url, function Calculator(handle: Handle) {
-  let value: number | null = null
-  let displayValue = '0'
-  let operator: string | null = null
-  let waitingForOperand = false
-
+  let state = initialState
   let displayText: HTMLElement | undefined
 
-  function clearAll() {
-    value = null
-    displayValue = '0'
-    operator = null
-    waitingForOperand = false
+  function input(key: CalculatorKey) {
+    state = press(state, key)
+    handle.update()
   }
 
-  function clearDisplay() {
-    displayValue = '0'
-  }
-
-  function clearLastChar() {
-    displayValue = displayValue.substring(0, displayValue.length - 1) || '0'
-  }
-
-  function toggleSign() {
-    displayValue = String(parseFloat(displayValue) * -1)
-  }
-
-  function inputPercent() {
-    let currentValue = parseFloat(displayValue)
-    if (currentValue === 0) return
-
-    let fixedDigits = displayValue.replace(/^-?\d*\.?/, '')
-    displayValue = String((currentValue / 100).toFixed(fixedDigits.length + 2))
-  }
-
-  function inputDot() {
-    if (!/\./.test(displayValue)) {
-      displayValue += '.'
-      waitingForOperand = false
-    }
-  }
-
-  function inputDigit(digit: number) {
-    if (waitingForOperand) {
-      displayValue = String(digit)
-      waitingForOperand = false
-    } else {
-      displayValue = displayValue === '0' ? String(digit) : displayValue + digit
-    }
-  }
-
-  function performOperation(nextOperator: string) {
-    let inputValue = parseFloat(displayValue)
-
-    if (value == null) {
-      value = inputValue
-    } else if (operator) {
-      let newValue = operations[operator](value || 0, inputValue)
-      value = newValue
-      displayValue = String(newValue)
-    }
-
-    waitingForOperand = true
-    operator = nextOperator
-  }
-
-  function press(action: () => void) {
-    return on<HTMLButtonElement>('click', () => {
-      action()
-      handle.update()
-    })
+  function onPress(key: CalculatorKey) {
+    return on<HTMLButtonElement>('click', () => input(key))
   }
 
   // Shrink the display text to fit when the number gets long.
@@ -96,81 +37,65 @@ export const Calculator = clientEntry(import.meta.url, function Calculator(handl
     document.addEventListener(
       'keydown',
       (event) => {
-        let { key } = event
-        if (event.ctrlKey || event.metaKey) return
-        if (key === 'Enter') key = '='
+        if (event.ctrlKey || event.metaKey || event.altKey) return
 
-        if (/\d/.test(key)) {
-          inputDigit(parseInt(key, 10))
-        } else if (key in operations) {
-          performOperation(key)
-        } else if (key === '.') {
-          inputDot()
-        } else if (key === '%') {
-          inputPercent()
-        } else if (key === 'Backspace') {
-          event.preventDefault()
-          clearLastChar()
-        } else if (key === 'Clear') {
-          event.preventDefault()
-          if (displayValue !== '0') clearDisplay()
-          else clearAll()
-        } else {
-          return
-        }
+        let key = keyFromKeyboard(event.key)
+        if (!key) return
 
-        handle.update()
+        // Without this, Enter also "clicks" whichever key has focus, and "/"
+        // opens Quick Find in Firefox.
+        event.preventDefault()
+        input(key)
       },
       { signal: handle.signal },
     )
   })
 
   return () => {
-    let showClear = displayValue !== '0'
     handle.queueTask(rescaleDisplay)
 
     return (
       <div mix={calculatorStyle}>
         <div mix={displayStyle}>
           <div mix={[displayTextStyle, ref((node) => (displayText = node))]}>
-            {formatDisplayValue(displayValue)}
+            {formatDisplayValue(state.displayValue)}
           </div>
         </div>
         <div mix={keypadStyle}>
           <div mix={inputKeysStyle}>
             <div mix={functionKeysStyle}>
-              <Key mix={[press(() => (showClear ? clearDisplay() : clearAll())), functionKeyStyle]}>
-                {showClear ? 'C' : 'AC'}
+              <Key mix={[onPress('Clear'), functionKeyStyle]}>
+                {clearsDisplayOnly(state) ? 'C' : 'AC'}
               </Key>
-              <Key mix={[press(toggleSign), functionKeyStyle]}>±</Key>
-              <Key mix={[press(inputPercent), functionKeyStyle]}>%</Key>
+              <Key mix={[onPress('±'), functionKeyStyle]}>±</Key>
+              <Key mix={[onPress('%'), functionKeyStyle]}>%</Key>
             </div>
             <div mix={digitKeysStyle}>
-              <Key mix={[press(() => inputDigit(0)), digitKeyStyle, zeroKeyStyle]}>0</Key>
-              <Key mix={[press(inputDot), digitKeyStyle, dotKeyStyle]} aria-label="Decimal point">
+              <Key mix={[onPress('0'), digitKeyStyle, zeroKeyStyle]}>0</Key>
+              <Key mix={[onPress('.'), digitKeyStyle, dotKeyStyle]} aria-label="Decimal point">
                 ●
               </Key>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((digit) => (
-                <Key key={digit} mix={[press(() => inputDigit(digit)), digitKeyStyle]}>
+              {(['1', '2', '3', '4', '5', '6', '7', '8', '9'] as const).map((digit) => (
+                <Key key={digit} mix={[onPress(digit), digitKeyStyle]}>
                   {digit}
                 </Key>
               ))}
             </div>
           </div>
           <div mix={operatorKeysStyle}>
-            <Key mix={[press(() => performOperation('/')), operatorKeyStyle]} aria-label="Divide">
+            <Key mix={[onPress('/'), operatorKeyStyle]} aria-label="Divide">
               ÷
             </Key>
-            <Key mix={[press(() => performOperation('*')), operatorKeyStyle]} aria-label="Multiply">
+            <Key mix={[onPress('*'), operatorKeyStyle]} aria-label="Multiply">
               ×
             </Key>
-            <Key mix={[press(() => performOperation('-')), operatorKeyStyle]} aria-label="Subtract">
+            <Key mix={[onPress('-'), operatorKeyStyle]} aria-label="Subtract">
               −
             </Key>
-            <Key mix={[press(() => performOperation('+')), operatorKeyStyle]} aria-label="Add">
+            <Key mix={[onPress('+'), operatorKeyStyle]} aria-label="Add">
               +
             </Key>
-            <Key mix={[press(() => performOperation('=')), operatorKeyStyle]} aria-label="Equals">
+            <Key mix={[onPress('='), operatorKeyStyle]} aria-label="Equals">
               =
             </Key>
           </div>
@@ -194,6 +119,8 @@ function Key(
 }
 
 function formatDisplayValue(value: string): string {
+  if (Number.isNaN(parseFloat(value))) return value // e.g. "Error"
+
   let language = (typeof navigator !== 'undefined' && navigator.language) || 'en-US'
   let formatted = parseFloat(value).toLocaleString(language, {
     useGrouping: true,
