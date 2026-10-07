@@ -47,7 +47,7 @@ scripts/build.ts          prerenders the site into dist/
 
 ## Deploying
 
-Every push to `master` runs `.github/workflows/deploy.yml`. It typechecks, runs the tests, prerenders the site into `dist/` with `npm run build`, and publishes that folder to GitHub Pages at [mjackson.me](https://mjackson.me).
+Every push to `main` runs `.github/workflows/deploy.yml`. It typechecks, runs the tests, prerenders the site into `dist/` with `npm run build`, and publishes that folder to GitHub Pages at [mjackson.me](https://mjackson.me).
 
 The custom domain is set under the repo's Settings → Pages. DNS lives in Cloudflare:
 
