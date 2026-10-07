@@ -97,6 +97,17 @@ export const quietLinkStyle = css({
   '&:hover': { color: 'var(--fg-strong)' },
 })
 
+/** Underlined link inside running text, matching links in posts. */
+export const inlineLinkStyle = css({
+  color: 'var(--fg-strong)',
+  textDecorationLine: 'underline',
+  textDecorationThickness: '1px',
+  textDecorationColor: 'var(--rule-strong)',
+  textUnderlineOffset: '4px',
+  transition: 'text-decoration-color 150ms ease',
+  '&:hover': { textDecorationColor: 'var(--fg-strong)' },
+})
+
 /** Long-form Markdown content. */
 export const proseStyle = css({
   fontSize: '18px',

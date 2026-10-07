@@ -5,6 +5,7 @@ import { accomplishments, profile } from '../data/profile.ts'
 import { formatDate, type Post } from '../data/posts.ts'
 import { routes } from '../routes.ts'
 import { Document } from '../ui/document.tsx'
+import { InlineLinks } from '../ui/inline-links.tsx'
 import { LeaderList } from '../ui/leader-list.tsx'
 import { displayStyle, labelStyle, leadStyle, quietLinkStyle } from '../ui/theme.ts'
 
@@ -19,7 +20,9 @@ export function HomePage(handle: Handle<{ posts: Post[] }>) {
           <h1 id="intro" mix={displayStyle}>
             {profile.name}
           </h1>
-          <p mix={leadStyle}>{profile.intro}</p>
+          <p mix={leadStyle}>
+            <InlineLinks text={profile.intro} />
+          </p>
         </section>
 
         <Section id="work" label="Selected work">
